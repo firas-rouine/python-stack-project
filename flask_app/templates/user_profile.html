@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Profile</title>
+</head>
+<style>
+    body{
+        margin: 0 auto;
+    }
+    .navbar1 {
+        width: 100%;
+        position: fixed;
+        display: flex;
+        background-color:#2b3238;
+        justify-content: space-around;
+        align-items: center;
+
+      }
+      .nav-link {
+        text-decoration: none;
+      }
+      .navbar1-nav {
+        width: 70%;
+        display: flex;
+        list-style: none;
+        justify-content:space-around;
+      }
+    </style>
+<body>
+
+    <nav class="navbar1" id="mainNav">
+        <a class="nav-link" href="#page-top">tari9i</a>
+        <ul class="navbar1-nav ">
+            <li><a class="nav-link" href="/">Home</a></li>
+            <li><a class="nav-link" href="#pub-uni">Public Universities</a></li>
+            <li><a class="nav-link" href="#pri-uni">Private Universities</a></li>
+            <li><a class="nav-link" href="#trai-cent">Training Center</a></li>
+            <li><a class="nav-link" href="#inter">Internships</a></li>
+            <li><a class="nav-link" href="#contact">Contact</a></li>
+            
+            
+            {% if session['user_id']%}
+            <ul class="navbar-nav d-flex flex-row ms-auto me-3">
+              <li class="nav-item me-3 me-lg-0 dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
+                  aria-expanded="false">
+                  <img src="{{image}}" class="rounded-circle" height="24"
+                    alt="" loading="lazy" />
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+                  <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                  <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+            </ul>
+          {% else %}
+            <li><a class="nav-link" href="/register">Sign Up</a></li>
+            <li><a class="nav-link" href="/login">Log In</a></li>
+          {% endif %}
+            <!-- <li><a class="nav-link" href="/register">Sign Up</a></li>
+            <li><a class="nav-link" href="/login">Log In</a></li> -->
+            
+        </ul>
+    </nav>
+    <br><br><br><br>
+    <div style="display: flex;">
+        <div>
+           
+                
+                <img src="{{image}}" style="width: 150px; height: 150px;">            
+        </div>
+        <div>
+            
+            
+            <p>{{user.first_name}} {{user.last_name}}</p>
+            <p>{{user.email}}</p>
+            <p>25 comments</p>
+        </div>
+        <div>
+            <a href="/profile/edit">Edit</a>
+        </div>
+    </div>
+    <div>
+        {% if user.is_creator == 0 %}
+            <hr style="width: 3px;">
+            <h1>My Favories</h1>
+        {%endif%}
+        {% if user.is_creator == 1 %}
+            <hr style="width: 3px;">
+            <div style="display: flex; justify-content: space-around;">
+            <h1>My Institutions</h1>
+            <a href="#">+Create</a>
+            </div>
+        {%endif%}
+        </div>
+        <script type="text/javascript" src="https://mdbootstrap.com/api/snippets/static/download/MDB5-Free_6.3.1/js/mdb.min.js"></script>
+ 
+</body>
+</html>

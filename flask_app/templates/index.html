@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>dashboard</title>
+    <!-- <link href="static/css/styles.css" rel="stylesheet" /> -->
+</head>
+<style>
+    body{
+        margin: 0 auto;
+    }
+    .navbar1 {
+        width: 100%;
+        position: fixed;
+        display: flex;
+        background-color:#2b3238;
+        justify-content: space-around;
+        align-items: center;
+
+      }
+      .nav-link {
+        text-decoration: none;
+      }
+      .navbar1-nav {
+        width: 70%;
+        display: flex;
+        list-style: none;
+        justify-content:space-around;
+      }
+
+      header.masthead {
+        text-align: center;
+        font-size: 2.5em;
+        color: #002E7C;
+        background-image: url("static/assets/img/orientation-scolaire.png");
+        background-attachment: scroll;
+        background-size: cover;
+      }
+
+      .container{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .view{
+
+        width: 20%;
+        background-color: #002E7C;
+        border: 2px black solid;
+        padding: 50px;
+        margin: 20px;
+
+      }
+
+        section {
+            padding-top: 3rem;
+            padding-bottom: 29.5rem;
+        }
+        header.masthead {
+            padding-top: 19rem;
+            padding-bottom: 12.5rem;
+            text-align: center;
+        }
+        footer {
+                background-color: #2b3238;
+                padding: 20px 0;
+                background-image: url("static/assets/img/map-image.png");
+                background-repeat: no-repeat;
+                background-position: center;
+                color: white;
+
+            }
+        a{
+            color: white;
+
+        }
+
+
+
+
+          
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            align-items: end;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+          
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+          
+
+          
+          .contact-section {
+            margin-top: 20px;
+          }
+          
+          .contact-section h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+          }
+          
+          .contact-section p {
+            margin: 5px 0;
+          }
+
+
+
+
+
+
+
+
+
+
+          .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+          }
+          
+          .pagination button {
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+            background-color: #f5f5f5;
+            color: #333;
+            cursor: pointer;
+          }
+          
+          .pagination button:hover {
+            background-color: #ddd;
+          }
+          
+          .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+
+
+
+
+
+
+
+          .user-photo {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+        
+          .dropdown-menu {
+            background-color: #f8f9fa;
+            border: none;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+          }
+        
+          .dropdown-item {
+            color: #333;
+          }
+        
+          .dropdown-item:hover,
+          .dropdown-item:focus {
+            background-color: #e9ecef;
+            color: #333;
+          }
+
+          
+
+</style>
+<body id="page-top">
+
+    <!-- Navigation-->
+    
+    <nav class="navbar1" id="mainNav">
+            <a class="nav-link" href="#page-top">tari9i</a>
+            <ul class="navbar1-nav ">
+                <li><a class="nav-link" href="#page-top">Home</a></li>
+                <li><a class="nav-link" href="#pub-uni">Public Universities</a></li>
+                <li><a class="nav-link" href="#pri-uni">Private Universities</a></li>
+                <li><a class="nav-link" href="#trai-cent">Training Center</a></li>
+                <li><a class="nav-link" href="#inter">Internships</a></li>
+                <li><a class="nav-link" href="#contact">Contact</a></li>
+                
+                
+                {% if session['user_id']%}
+                <ul class="navbar-nav d-flex flex-row ms-auto me-3">
+                  <li class="nav-item me-3 me-lg-0 dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
+                      aria-expanded="false">
+                      <img src="{{image}}" class="rounded-circle" height="24"
+                        alt="" loading="lazy" />
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+                      <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                      <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                </ul>
+              {% else %}
+                <li><a class="nav-link" href="/register">Sign Up</a></li>
+                <li><a class="nav-link" href="/login">Log In</a></li>
+              {% endif %}
+                <!-- <li><a class="nav-link" href="/register">Sign Up</a></li>
+                <li><a class="nav-link" href="/login">Log In</a></li> -->
+                
+            </ul>
+    </nav>
+   
+	
+    <!-- Masthead-->
+    <header class="masthead">
+
+            <input type="text" placeholder="Search..">
+            <h2>Welcome to our Tari9i app!</h2>
+
+    </header>
+
+    <!-- Public Universities-->
+    <section  id="pub-uni">
+        <h2>Public Universities</h2>
+        <div class="container">
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+                gjdfgjdghjdsgf
+               
+            </div>
+            <div class="view">
+                kndjkfgkdjfg
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+        </div>
+        <div class="pagination">
+            <button onclick="previousPage()">Previous</button>
+            <button onclick="nextPage()">Next</button>
+          </div>
+
+
+    </section>
+    <!-- Private Universities-->
+    <section  id="pri-uni">
+        <h2 >Private Universities</h2>
+        <div class="container">
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+              gjdfgjdghjdsgf
+             
+          </div>
+          <div class="view">
+              kndjkfgkdjfg
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+      </div>
+      <div class="pagination">
+          <button onclick="previousPage()">Previous</button>
+          <button onclick="nextPage()">Next</button>
+        </div>
+
+
+    </section>
+    <!-- Training Center-->
+    <section  id="trai-cent">
+        <h2>Training Center</h2>
+        <div class="container">
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+              gjdfgjdghjdsgf
+             
+          </div>
+          <div class="view">
+              kndjkfgkdjfg
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+         
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+          <div class="view">
+             
+          </div>
+      </div>
+      <div class="pagination">
+          <button onclick="previousPage()">Previous</button>
+          <button onclick="nextPage()">Next</button>
+        </div>
+
+    </section>
+    <!-- Internships-->
+    <section  id="inter">
+      <h2>Internships</h2>
+     <div class="container">
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+                gjdfgjdghjdsgf
+               
+            </div>
+            <div class="view">
+                kndjkfgkdjfg
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+           
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+            <div class="view">
+               
+            </div>
+        </div>
+        <div class="pagination">
+            <button onclick="previousPage()">Previous</button>
+            <button onclick="nextPage()">Next</button>
+          </div>
+
+    </section>
+	
+
+    <footer>
+        <div class="footer" id="contact">
+          <div class="footer-content">
+           
+            <nav >
+              <ul style="list-style: none;">
+                <li><a class="nav-link" href="#page-top">Home</a></li>
+                <li><a class="nav-link" href="#pub-uni">Public Universities</a></li>
+                <li><a class="nav-link" href="#pri-uni">Private Universities</a></li>
+                <li><a class="nav-link" href="#trai-cent">Training Center</a></li>
+                <li><a class="nav-link" href="#inter">Internships</a></li>
+                <li><a class="nav-link" href="#contact">Contact Us</a></li>
+              </ul>
+            </nav>
+          </div>
+          <div class="contact-section">
+            <h3>Contact Us</h3>
+            <p>Address: 123 Contact Street, City, Country</p>
+            <p>Phone: +1 234 567 890</p>
+            <p>Email: contact@yourcompany.com</p>
+          </div>
+          <p>&copy; 2023 Your Company Name. All rights reserved.</p>
+        </div>
+      </footer>
+
+
+
+
+
+
+
+
+
+
+      <script>
+        var currentPage = 1;
+        var itemsPerPage = 6;
+        var views = document.querySelectorAll("#pub-uni .view");
+        var totalPages = Math.ceil(views.length / itemsPerPage);
+      
+        function showPage(page) {
+          var startIndex = (page - 1) * itemsPerPage;
+          var endIndex = startIndex + itemsPerPage;
+      
+          for (var i = 0; i < views.length; i++) {
+            if (i >= startIndex && i < endIndex) {
+              views[i].style.display = "block";
+            } else {
+              views[i].style.display = "none";
+            }
+          }
+        }
+      
+        function previousPage() {
+          if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
+          }
+        }
+      
+        function nextPage() {
+          if (currentPage < totalPages) {
+            currentPage++;
+            showPage(currentPage);
+          }
+        }
+      
+        // Show the first page initially
+        showPage(currentPage);
+        
+      </script>
+      <script type="text/javascript" src="https://mdbootstrap.com/api/snippets/static/download/MDB5-Free_6.3.1/js/mdb.min.js"></script>
+ 
+
+</body>
+</html>
