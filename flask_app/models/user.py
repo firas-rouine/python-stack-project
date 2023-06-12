@@ -41,7 +41,7 @@ class User:
     def get_by_id(cls, data):
         query="SELECT * FROM users WHERE id=%(id)s;"
         results = connectToMySQL(DATABASE).query_db(query,data)
-        print(results,"******---"*25)
+        # print(results,"******---"*25)
         if len(results)< 1 :
             return []
         return cls(results[0])
@@ -59,7 +59,7 @@ class User:
     @classmethod
     def update_profile(cls, data):
         query = """
-            UPDATE users SET first_name =%(first_name)s,last_name =%(last_name)s
+            UPDATE users SET first_name =%(first_name)s,last_name =%(last_name)s,image =%(image)s
             WHERE id = %(id)s ;
         """
         return connectToMySQL(DATABASE).query_db(query, data)

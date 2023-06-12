@@ -1,6 +1,11 @@
 from flask_app import app, IMAGES_PATH
 from flask import render_template,request, redirect, session,flash,url_for
-from flask_app.models.reglog import User
+from flask_app.models.images_model import Image
+from flask_app.models.user import User
+from flask_app.models.institution_model import Institution
+# Set up OpenAI API credentials
+import openai
+openai.api_key = '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'
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 import urllib.request
@@ -16,12 +21,14 @@ def allowed_file(filename):
 #========================Dashboard===========================
 @app.route('/')
 def index():
+    institutions=Institution.get_all_institutions()
+
     if 'user_id' in session:
         user = User.get_by_id({'id':session['user_id']})
         image=IMAGES_PATH+user.image
-        return render_template('index.html', users=user,image=image)
+        return render_template('index.html', users=user,institutions=institutions,image=image)
     else:
-        return render_template('index.html')
+        return render_template('index.html',institutions=institutions)
     #========================Root===========================
 @app.route('/profile')
 def profile():
@@ -98,9 +105,26 @@ def edit_profile():
 
 @app.route('/profile/update',methods=['post'])
 def update_profile():
+    data={
+        **request.form,
+        'image':User.validate_image(request.files['file'].filename)
+    }
     if not User.validate_user_edit(request.form):
         return redirect("/profile/edit")
-    x= User.update_profile(request.form)
+    x= User.update_profile(data)
+    
+    
+    file = request.files['file']
+    # if file.filename == '':
+    #     flash('No image selected for uploading')
+    #     return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        # session['filename']=filename
+        # print('filename============',filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        #print('upload_image filename: ' + filename)
+        flash('Image successfully uploaded and displayed below')
     print("++--"*30,x,"++--"*30)
     return redirect('/profile')
 
@@ -109,3 +133,30 @@ def update_profile():
 def logout():
     session.clear()
     return redirect('/')
+
+
+                                    # OpenAI's API
+@app.route("/api", methods=["POST"])
+def api():
+    # Get the message from the POST request
+    message = request.json.get("message")
+    
+    # Send the message to OpenAI's API and receive the response
+    completion = openai.Completion.create(
+        engine='text-davinci-003',
+        prompt=message,
+        max_tokens=200,
+        temperature=0.5,
+        top_p=1,
+
+
+    )
+    
+    # Extract the generated response from the API response
+    response = completion.choices[0].text.strip()
+
+    if response:
+        return {"content": response}
+    else:
+        return {"content": 'Failed to generate response!'}
+
