@@ -11,6 +11,7 @@ class Institution:
     # CONSTRUCTOR - Make Defaults
     def __init__(self, data):
         self.id = data["id"]
+        self.select_inst=data["select_inst"]
         self.name = data["name"]
         self.email = data["email"]
         self.phone = data["phone"]
@@ -27,8 +28,8 @@ class Institution:
     @classmethod
     def create(cls, data):
         query = """ 
-                    INSERT INTO institutions (name, email, phone, fax, diploma,program_tittle, description, creator_id)
-                    VALUES (%(name)s,  %(email)s, %(phone)s,%(fax)s, %(diploma)s, %(program_tittle)s, %(description)s, %(creator_id)s);
+                    INSERT INTO institutions (select_inst,name, email, phone, fax, diploma,program_tittle, description, creator_id)
+                    VALUES (%(type)s,%(name)s,  %(email)s, %(phone)s,%(fax)s, %(diploma)s, %(program_tittle)s, %(description)s, %(creator_id)s);
                 """
         return connectToMySQL(DATABASE).query_db(query, data)
 

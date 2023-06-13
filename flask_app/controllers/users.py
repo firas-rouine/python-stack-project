@@ -5,7 +5,7 @@ from flask_app.models.user import User
 from flask_app.models.institution_model import Institution
 # Set up OpenAI API credentials
 import openai
-openai.api_key = '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'
+
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 import urllib.request

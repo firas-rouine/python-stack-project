@@ -1,4 +1,56 @@
-
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    text-align: center;
+  }
+  
+  .search__input {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    color: #646464;
+    padding: 0.7rem 1rem;
+    border-radius: 30px;
+    width: 12em;
+    transition: all ease-in-out .5s;
+    margin-right: -2rem;
+  }
+  
+  .search__input:hover, .search__input:focus {
+    box-shadow: 0 0 1em #00000013;
+  }
+  
+  .search__input:focus {
+    outline: none;
+    background-color: #f0eeee;
+  }
+  
+  .search__input::-webkit-input-placeholder {
+    font-weight: 100;
+    color: #ccc;
+  }
+  
+  .search__input:focus + .search__button {
+    background-color: #f0eeee;
+  }
+  
+  .search__button {
+    border: none;
+    background-color: #f4f2f2;
+    margin-top: .1em;
+  }
+  
+  .search__button:hover {
+    cursor: pointer;
+  }
+  
+  .search__icon {
+    height: 1.3em;
+    width: 1.3em;
+    fill: #b4b4b4;
+  }
        /* style of index page */
 
 body{
@@ -7,14 +59,16 @@ body{
 
 
 *, html {
-    --primaryGradient: linear-gradient(93.12deg, #581B98 0.52%, #9C1DE7 100%);
-    --secondaryGradient: linear-gradient(268.91deg, #581B98 -2.14%, #9C1DE7 99.69%);
+    --primaryGradient: linear-gradient(93.12deg, #581B98 0.52%, #8868a0 100%);
+    --secondaryGradient: linear-gradient(268.91deg, #581B98 -2.14%, #8868a0 99.69%);
     --primaryBoxShadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
     --secondaryBoxShadow: 0px -10px 15px rgba(0, 0, 0, 0.1);
     --primary: #581B98;
 }
-
-.navbar1 {
+.bg-nav {
+    background:var(--secondaryGradient);
+  }
+/* .navbar1 {
     width: 100%;
     position: fixed;
     display: flex;
@@ -31,13 +85,13 @@ body{
     display: flex;
     list-style: none;
     justify-content:space-around;
-}
+} */
 
 header.masthead {
     text-align: center;
     font-size: 2.5em;
     color: #002E7C;
-    background-image: url("../images/orientation-scolaire.png");
+    background-image: url("../images/orientation2.jpg");
     background-attachment: scroll;
     background-size: cover;
 }
@@ -66,35 +120,40 @@ header.masthead {
 
 }
 .view1 p{
+    width: 40%;
     margin-left: 20px;
-    width: 50%;
     word-wrap: break-word;
 }
-.view_more{
+.view_more {
     text-align: right;
-    color: #002E7C;
-    text-decoration:underline;
+   
+}
+.view_more a{
+    color: #731cb7;
+
 }
 .view1 img{
-    width: 200px;
+    width: 50%;
     height: 150px;
 }
 
 
 section {
-    padding-top: 3rem;
-    padding-bottom: 29.5rem;
+    padding-top: 5rem;
+    padding-bottom: 33.5rem;
 }
 section h2{
     padding-left: 15%;
 }
 header.masthead {
-    padding-top: 19rem;
-    padding-bottom: 21%;
-    text-align: center;
+    padding-top: 10%;
+    padding-bottom: 40%;
+
+    background-size: cover;
+    background-position: center;
 }
 footer {
-    background-color: #2b3238;
+    background-color: #8868a0;
     padding: 20px 0;
     background-image: url("../images/map-image.png");
     background-repeat: no-repeat;
