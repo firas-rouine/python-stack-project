@@ -117,12 +117,13 @@
             <div class="col-6">
                 <h3>Add New Institution</h3>
                 <a href="/profile">Profile</a>
-                <form action="/creators/institution" method="post" enctype="multipart/form-data">
+                <form action="/institution/edit" method="post" enctype="multipart/form-data">
                     <div class="row my-4">
                         <label for="type" class="form-label col">type:</label>
                         <div class="col-9">
                             <select name="type" class="form-select">
-                                <option value="Public University" selected>Public University</option>
+                                <option value="{{institution.type}}" selected>Public University</option>
+                                <option value="Public University" >Public University</option>
                                 <option value="Private University">Private University</option>
                                 <option value="Training Center">Training Center</option>
                                 <option value="Intership">Intership</option>
@@ -132,7 +133,7 @@
                     <div class="row my-4">
                         <label for="name" class="form-label col">Name:</label>
                         <div class="col-9">
-                            <input name="name" class="form-control">
+                            <input name="name" class="form-control" value="{{institution.name}}">
                         </div>
                         {% for message in get_flashed_messages(category_filter=["error_name"]) %}
                         <div class="alert alert-danger">
@@ -143,7 +144,7 @@
                     <div class="row my-4">
                         <label for="government" class="form-label col">government:</label>
                         <div class="col-9">
-                            <input name="government" class="form-control col">
+                            <input name="government" class="form-control col" value="{{adresses.government}}">
                         </div>
                         {% for message in get_flashed_messages(category_filter=["error_government"]) %}
                         <div class="alert alert-danger">
@@ -154,7 +155,7 @@
                     <div class="row my-4">
                         <label for="city" class="form-label col">city:</label>
                         <div class="col-9">
-                            <input name="city" class="form-control col">
+                            <input name="city" class="form-control col" value="{{adresses.city}}">
                         </div>
                         {% for message in get_flashed_messages(category_filter=["error_city"]) %}
                         <div class="alert alert-danger">
@@ -165,7 +166,7 @@
                     <div class="row my-4">
                         <label for="zipcode" class="form-label col">ZipCode:</label>
                         <div class="col-9">
-                            <input name="zipcode" type="number" class="form-control col">
+                            <input name="zipcode" type="number" class="form-control col" value="{{adresses.zipcode}}">
                         </div>
                         {% for message in get_flashed_messages(category_filter=["error_zipcode"]) %}
                         <div class="alert alert-danger">
@@ -176,7 +177,7 @@
                     <div class="row my-4">
                         <label for="street" class="form-label col">Street:</label>
                         <div class="col-9">
-                            <input name="street" class="form-control col">
+                            <input name="street" class="form-control col" value="{{adresses.street}}">
                         </div>
                         {% for message in get_flashed_messages(category_filter=["error_street"]) %}
                         <div class="alert alert-danger">
@@ -187,7 +188,7 @@
                     <div class="row my-4">
                         <label for="email" class="form-label col">Email:</label>
                         <div class="col-9">
-                            <input name="email" class="form-control col">
+                            <input name="email" class="form-control col" value="{{institution.email}}">
                         </div>
                         {% for message in get_flashed_messages(category_filter=["error_email"]) %}
                         <div class="alert alert-danger">
@@ -198,7 +199,7 @@
                     <div class="row my-4">
                         <label for="phone" class="form-label col">Phone:</label>
                         <div class="col-9">
-                            <input name="phone" type="number" class="form-control col">
+                            <input name="phone" type="number" class="form-control col" value="{{institution.phone}}">
                         </div>
                         {% for message in get_flashed_messages(category_filter=["error_phone"]) %}
                         <div class="alert alert-danger">
@@ -210,48 +211,51 @@
                     <div class="row my-4">
                         <label for="fax" class="form-label col">Fax:</label>
                         <div class="col-9">
-                            <input name="fax" type="number" class="form-control col">
+                            <input name="fax" type="number" class="form-control col" value="{{institution.fax}}">
                         </div>
                     </div>
                     <!-- !========================================================block program -->
-                    <div id="inputContainer">
+                    
+                    {% for diploma in diplomas %}
+                        <div id="inputContainer">
+                                
+                            <div class="row my-4">
+                                <label for="diploma" class="form-label col">Diploma:</label>
+                                <div class="col-9">
+                                    <input name="diploma1" class="form-control col" value="{{diploma.diploma1}}">
+                                </div>
+                                {% for message in get_flashed_messages(category_filter=["error_diploma"]) %}
+                                <div class="alert alert-danger">
+                                    {{message}}
+                                </div>
+                                {% endfor %}
+                            </div>
 
-                        <div class="row my-4">
-                            <label for="diploma" class="form-label col">Diploma:</label>
-                            <div class="col-9">
-                                <input name="diploma1" class="form-control col">
+                            <div class="row my-4">
+                                <label for="program_tittle" class="form-label col">Program Tittle:</label>
+                                <div class="col-9">
+                                    <input name="program_tittle1" class="form-control col" value="{{diploma.program_tittle1}}">
+                                </div>
+                                {% for message in get_flashed_messages(category_filter=["error_program_tittle"]) %}
+                                <div class="alert alert-danger">
+                                    {{message}}
+                                </div>
+                                {% endfor %}
                             </div>
-                            {% for message in get_flashed_messages(category_filter=["error_diploma"]) %}
-                            <div class="alert alert-danger">
-                                {{message}}
-                            </div>
-                            {% endfor %}
-                        </div>
 
-                        <div class="row my-4">
-                            <label for="program_tittle" class="form-label col">Program Tittle:</label>
-                            <div class="col-9">
-                                <input name="program_tittle1" class="form-control col">
+                            <div class="row my-4">
+                                <label for="description"  class="form-label col">Description:</label>
+                                <div class="col-9">
+                                    <textarea name="description1" cols="30" rows="3" class="form-control col" value="{{diploma.description1}}"></textarea>
+                                </div>
+                                {% for message in get_flashed_messages(category_filter=["error_description"]) %}
+                                <div class="alert alert-danger">
+                                    {{message}}
+                                </div>
+                                {% endfor %}
                             </div>
-                            {% for message in get_flashed_messages(category_filter=["error_program_tittle"]) %}
-                            <div class="alert alert-danger">
-                                {{message}}
-                            </div>
-                            {% endfor %}
                         </div>
-
-                        <div class="row my-4">
-                            <label for="description"  class="form-label col">Description:</label>
-                            <div class="col-9">
-                                <textarea name="description1" cols="30" rows="3" class="form-control col"></textarea>
-                            </div>
-                            {% for message in get_flashed_messages(category_filter=["error_description"]) %}
-                            <div class="alert alert-danger">
-                                {{message}}
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+                    {% endfor %}
                     <!-- !======================================================== -->
                     <div class="d-flex justify-content-between">
                         
@@ -273,6 +277,10 @@
                 </div>
                 <div>
                     <!-- ? *********************  add the images  **********************-->
+                    {%for image in images %}
+                    <img src="{{image[name_image]}}" alt="">
+                    <a href="/delete/{{image_id}}"></a>
+                    {%endfor%}
                     <div id="images" style="height: 100px; width: 360px;">
 
                     </div>

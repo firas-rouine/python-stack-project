@@ -1,5 +1,6 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app import app,DATABASE,IMAGES_PATH
+from flask_app.models import address_model
 from flask import flash
 from flask import render_template,request, redirect, session,flash,url_for
 
@@ -11,27 +12,24 @@ class Institution:
     # CONSTRUCTOR - Make Defaults
     def __init__(self, data):
         self.id = data["id"]
-        self.select_inst=data["select_inst"]
         self.name = data["name"]
+        self.select_inst = data["select_inst"]
         self.email = data["email"]
         self.phone = data["phone"]
         self.fax = data["fax"]
-        self.diploma = data["diploma"]
-        self.program_tittle = data["program_tittle"]
-        self.description = data["description"]
         self.creator_id = data["creator_id"]
-        self.created_at = data["created_ad"]
+        self.created_at = data["created_at"]
         self.updated_at = data["updated_at"]
-        self.image = None
 
     # ========== CREATE Institution ============
     @classmethod
     def create(cls, data):
         query = """ 
-                    INSERT INTO institutions (select_inst,name, email, phone, fax, diploma,program_tittle, description, creator_id)
-                    VALUES (%(type)s,%(name)s,  %(email)s, %(phone)s,%(fax)s, %(diploma)s, %(program_tittle)s, %(description)s, %(creator_id)s);
+                    INSERT INTO institutions (name,select_inst, email, phone, fax, creator_id)
+                    VALUES (%(name)s,  %(type)s,  %(email)s, %(phone)s,%(fax)s, %(creator_id)s);
                 """
         return connectToMySQL(DATABASE).query_db(query, data)
+
 
     #=========================get user by id creator =======================
     @classmethod
@@ -43,8 +41,15 @@ class Institution:
             return False
         return result[0]
     
-    
-    #=========================get all creator =======================
+     # ========= GET institutions by ID ============
+    @classmethod
+    def get_by_id(cls, data):
+        query  = """SELECT * FROM institutions WHERE id = %(id)s;"""
+        results = connectToMySQL(DATABASE).query_db(query, data)
+        institution = cls(results[0])
+        institution.image = cls.get_image({'institution_id':institution.id})
+        return institution
+    #=========================get all creators =======================
     @classmethod
     def get_all_institutions(cls):
         query = """
@@ -59,6 +64,22 @@ class Institution:
             institutions.append(institution)
         return institutions
     
+    #=========================get one creator address=======================
+    @classmethod
+    def get_creator_institutions(cls,data):
+        query = """
+            select * from institutions where institutions.creator_id=%(id)s ; 
+        """
+        results = connectToMySQL(DATABASE).query_db(query,data)
+        # print(results)
+        institutions = []
+        for row in results:
+            institution=cls(row)
+            institution.image = cls.get_image({'institution_id':institution.id})
+            institution.address = address_model.Address.get_address_by_inst_id({'institution_id':institution.id})
+            institutions.append(institution)
+        return institutions 
+    
     @classmethod
     def get_image(cls,data):
         query = """
@@ -69,6 +90,9 @@ class Institution:
             # print("👌"*20,result[0]['name_image'],"👌"*20)
             return IMAGES_PATH+result[0]['name_image']
         return None
+    
+    
+    
     # =============== VALIDATIONS ================
 
     @staticmethod
@@ -83,17 +107,17 @@ class Institution:
             flash("Phone is Required !", "error_phone")
             is_valid = False
         # Check the diploma
-        if len(data['diploma']) < 2:
-            flash("Diploma is Required !", "error_diploma")
-            is_valid = False
+        # if len(data['diploma']) < 2:
+        #     flash("Diploma is Required !", "error_diploma")
+        #     is_valid = False
         # Check the program_tittle
-        if len(data['program_tittle']) < 2:
-            flash("Program_tittle is Required !", "error_program_tittle")
-            is_valid = False
+        # if len(data['program_tittle']) < 2:
+        #     flash("Program_tittle is Required !", "error_program_tittle")
+        #     is_valid = False
         # Check the description
-        if len(data['description']) < 2:
-            flash("Description is Required !", "error_description")
-            is_valid = False
+        # if len(data['description']) < 2:
+        #     flash("Description is Required !", "error_description")
+        #     is_valid = False
         # Check the email
         if len(data["email"]) < 1:
             is_valid = False

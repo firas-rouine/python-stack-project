@@ -1,58 +1,20 @@
-.search {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    text-align: center;
-  }
-  
-  .search__input {
-    font-family: inherit;
-    font-size: inherit;
-    background-color: #f4f2f2;
-    border: none;
-    color: #646464;
-    padding: 0.7rem 1rem;
-    border-radius: 30px;
-    width: 12em;
-    transition: all ease-in-out .5s;
-    margin-right: -2rem;
-  }
-  
-  .search__input:hover, .search__input:focus {
-    box-shadow: 0 0 1em #00000013;
-  }
-  
-  .search__input:focus {
-    outline: none;
-    background-color: #f0eeee;
-  }
-  
-  .search__input::-webkit-input-placeholder {
-    font-weight: 100;
-    color: #ccc;
-  }
-  
-  .search__input:focus + .search__button {
-    background-color: #f0eeee;
-  }
-  
-  .search__button {
-    border: none;
-    background-color: #f4f2f2;
-    margin-top: .1em;
-  }
-  
-  .search__button:hover {
-    cursor: pointer;
-  }
-  
-  .search__icon {
-    height: 1.3em;
-    width: 1.3em;
-    fill: #b4b4b4;
-  }
-       /* style of index page */
 
+       /* style of index page */
+       .divider:after,
+       .divider:before {
+       content: "";
+       flex: 1;
+       height: 1px;
+       background: #eee;
+       }
+       .h-custom {
+       height: calc(100% - 73px);
+       }
+       @media (max-width: 450px) {
+       .h-custom {
+       height: 100%;
+       }
+       }
 body{
     margin: 0 auto;
 }
@@ -68,24 +30,9 @@ body{
 .bg-nav {
     background:var(--secondaryGradient);
   }
-/* .navbar1 {
-    width: 100%;
-    position: fixed;
-    display: flex;
-    background-color:#2b3238;
-    justify-content: space-around;
-    align-items: center;
-
-}
-.nav-link {
-    text-decoration: none;
-}
-.navbar1-nav {
-    width: 70%;
-    display: flex;
-    list-style: none;
-    justify-content:space-around;
-} */
+  .search-input {
+    height: 30px;
+  }
 
 header.masthead {
     text-align: center;
@@ -450,9 +397,40 @@ padding: 8px 12px;
     cursor: pointer;
 }
 
+/* style of page user profile */
 
 
 
+.view2{
+    overflow: hidden;
+    width: 50%;
+    height: 300px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px;
+    
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+
+
+}
+.view2 p{
+    width: 100%;
+    margin-left: 40px;
+    word-wrap: break-word;
+}
+
+.view_more a{
+    color: #731cb7;
+
+}
+.view2 img{
+    width: 350px;
+    height: 220px;
+}
 
 
 

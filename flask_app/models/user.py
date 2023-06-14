@@ -70,22 +70,22 @@ class User:
         is_valid = True
 
         if len(data['first_name'])<2:
-            flash("First Name must be more than 2 characters!","register")
+            flash("First Name must be more than 2 characters!","reg_fn")
             is_valid = False
         if len(data['last_name'])<2:
-            flash("Last Name must be more than 2 characters!","register")
+            flash("Last Name must be more than 2 characters!","reg_ln")
             is_valid = False
         if not EMAIL_REGEX.match(data['email']): 
-            flash("Email must be valid !","register")
+            flash("Email must be valid !","reg_email")
             is_valid = False
         elif User.get_by_email({'email':data['email']}):
-            flash("Email already exist !","register")
+            flash("Email already exist !","reg_email")
             is_valid = False
-        if len(data['password'])<6:
-            flash("Password must be more than 6 characters!","register")
+        if len(data['password'])<8:
+            flash("Password must be more than 8 characters!","reg_password")
             is_valid = False
         elif data['password']!=data['confirm_password']:
-            flash("Passwords do not match!","register")
+            flash("Passwords do not match!","reg_password_conf")
             is_valid = False
 
         return is_valid
@@ -95,10 +95,10 @@ class User:
         is_valid = True
 
         if len(data['first_name'])<2:
-            flash("First Name must be more than 2 characters!","register")
+            flash("First Name must be more than 2 characters!","reg_fn")
             is_valid = False
         if len(data['last_name'])<2:
-            flash("Last Name must be more than 2 characters!","register")
+            flash("Last Name must be more than 2 characters!","reg_ln")
             is_valid = False
         return is_valid
     @staticmethod

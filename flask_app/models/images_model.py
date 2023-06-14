@@ -24,15 +24,14 @@ class Image:
         return connectToMySQL(DATABASE).query_db(query, data)
     
     
-    # #=================get all images for institutions ===============
-    # @classmethod
-    # def get_images_institution(cls,data):
-    #     query = """ 
-    #                 SELECT * FROM images WHERE images.institution_id =%(institution_id)s;
-    #             """
-    #     results = connectToMySQL(DATABASE).query_db(query,data)
-    #     images = []
-    #     for row in results:
-
-    #         images.append(cls(row))
-    #     return images
+    #=================get all images for institutions ===============
+    @classmethod
+    def get_images_institution(cls,data):
+        query = """ 
+                    SELECT * FROM images WHERE images.institution_id =%(institution_id)s;
+                """
+        results = connectToMySQL(DATABASE).query_db(query,data)
+        images = []
+        for row in results:
+            images.append(cls(row))
+        return images

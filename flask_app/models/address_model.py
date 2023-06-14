@@ -18,7 +18,7 @@ class Address:
         self.created_at = data["created_at"]
         self.updated_at = data["updated_at"]
 
-    # ========== CREATE Institution ============
+    # ========== CREATE address ============
     @classmethod
     def create(cls, data):
         query = """ 
@@ -26,6 +26,16 @@ class Address:
                     VALUES (%(government)s,  %(city)s, %(zipcode)s,%(street)s, %(institution_id)s);
                 """
         return connectToMySQL(DATABASE).query_db(query, data)
+    
+
+    #=================get address by institution id =============
+    @classmethod
+    def get_address_by_inst_id(cls,data):
+        query = """ 
+                    SELECT * FROM addresses WHERE institution_id =%(institution_id)s;
+                """
+        results = connectToMySQL(DATABASE).query_db(query,data)
+        return cls(results[0])
 
 
     # =============== VALIDATIONS ================

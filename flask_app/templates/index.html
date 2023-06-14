@@ -15,53 +15,57 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-nav fixed-top" id="mainNav">
     <a class="navbar-brand" href="#page-top">PathFinder</a>
-    <!-- <a class="navbar-brand" href="#page-top"><img src="static/images/logo.png" style="width: 80px; height: 50px;" alt="..." /></a> -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#page-top">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#pub-uni">Public Universities</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#pri-uni">Private Universities</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#trai-cent">Training Center</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#inter">Internships</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contact">Contact</a>
-        </li>
-        {% if session['user_id']%}
-        <ul class="navbar-nav d-flex flex-row ms-auto me-3">
-          <li class="nav-item me-3 me-lg-0 dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
-              aria-expanded="false">
-              <img src="{{image}}" class="rounded-circle" height="24" alt="" loading="lazy" />
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
-              <li><a class="dropdown-item" href="/profile">Profile</a></li>
-              <li><a class="dropdown-item" href="/logout">Log Out</a></li>
-            </ul>
-        {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="/register">Sign Up</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/login">Log In</a>
-        </li>
-        {% endif %}
-      </ul>
+  
+    <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
+      <form class="form-inline" action="https://www.google.com/search" method="GET" target="_blank">
+        <input class="form-control mr-sm-2 search-input" type="search" name="q" placeholder="Search in Google" aria-label="Search">
+      </form>
     </div>
+  
+    <ul class="navbar-nav ml-auto">
+      <!-- Navigation links -->
+      <li class="nav-item"></li>
+      <li class="nav-item">
+        <a class="nav-link" href="#page-top">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#pub-uni">Public Universities</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#pri-uni">Private Universities</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#trai-cent">Training Center</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#contact">Contact</a>
+      </li>
+  
+      <!-- Conditional rendering based on user session -->
+      {% if session['user_id']%}
+      <ul class="navbar-nav d-flex flex-row ms-auto me-3">
+        <li class="nav-item me-3 me-lg-0 dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
+            aria-expanded="false">
+            <img src="{{image}}" class="rounded-circle" height="24" alt="" loading="lazy" />
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+            <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+          </ul>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/register">Sign Up</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/login">Log In</a>
+      </li>
+      {% endif %}
+    </ul>
   </nav>
+  
+  
+  
   
   <div class="container">
     <div class="chatbox">
@@ -92,16 +96,7 @@
 
   <!-- Masthead-->
   <header class="masthead">
-    <div class="search">
-      <input type="text" class="search__input" placeholder="Type your text">
-      <button class="search__button">
-          <svg class="search__icon" aria-hidden="true" viewBox="0 0 24 24">
-              <g>
-                  <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
-              </g>
-          </svg>
-      </button>
-  </div>
+    
     <!-- <div class="container">
       <input type="text" placeholder="Search...">
       <div class="search"></div>
@@ -121,7 +116,7 @@
             <img src="{{ institution.image }}" >
             <p>{{ institution.name }}</p>
           </div>
-          <div class="view_more"><a  href="#">View more</a></div>
+          <div class="view_more"><a  href="/show_institution/{{ institution.id }}">View more</a></div>
         </div>
         {%endif%}
       {% endfor %}
@@ -148,7 +143,7 @@
             <img src="{{ institution.image }}" >
             <p>{{ institution.name }}</p>
           </div>
-          <div class="view_more"><a  href="#">View more</a></div>
+          <div class="view_more"><a  href="/show_institution/{{ institution.id }}">View more</a></div>
         </div>
         {%endif%}
       {% endfor %}
@@ -171,7 +166,7 @@
             <img src="{{ institution.image }}" >
             <p>{{ institution.name }}</p>
           </div>
-          <div class="view_more"><a  href="#">View more</a></div>
+          <div class="view_more"><a  href="/show_institution/{{ institution.id }}">View more</a></div>
         </div>
         {%endif%}
       {% endfor %}
@@ -182,49 +177,26 @@
     </div>
 
   </section>
-  <!-- Internships-->
-  <section id="inter">
-    <h2>Internships</h2>
-    <div class="container1">
-      {% for institution in institutions %}
-      {%if institution.select_inst=="Intership"%}
-        <div class="view1">
-          <div class="d-flex justify-content-between">
-            <img src="{{ institution.image }}" >
-            <p>{{ institution.name }}</p>
-          </div>
-          <div class="view_more"><a  href="#">View more</a></div>
-        </div>
-        {%endif%}
-      {% endfor %}
-    </div>
-    <div class="pagination">
-      <button onclick="previousPage()">Previous</button>
-      <button onclick="nextPage()">Next</button>
-    </div>
-
-  </section>
+  
 
 
   <footer>
     <div class="footer" id="contact">
       <div class="footer-content">
-
         <nav>
           <ul style="list-style: none;">
             <li><a class="nav-link" href="#page-top">Home</a></li>
             <li><a class="nav-link" href="#pub-uni">Public Universities</a></li>
             <li><a class="nav-link" href="#pri-uni">Private Universities</a></li>
             <li><a class="nav-link" href="#trai-cent">Training Center</a></li>
-            <li><a class="nav-link" href="#inter">Internships</a></li>
           </ul>
         </nav>
       </div>
       <div class="contact-section">
         <h3>Contact Us</h3>
         <p>Address: 123 Contact Street, City, Country</p>
-        <p>Phone: +1 234 567 890</p>
-        <p>Email: contact@yourcompany.com</p>
+        <p>Phone: 29108467</p>
+        <p>Email: contact@mycompany.com</p>
       </div>
       <p>&copy; 2023 Your Company Name. All rights reserved.</p>
     </div>
