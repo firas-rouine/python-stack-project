@@ -45,6 +45,13 @@ class Review:
         for result in results:
             reviews.append(cls(result))
         return reviews
+         #========================= delete review institution =======================
+    @classmethod
+    def delete_rate_inst(cls,data):
+        query="""DELETE FROM reviews
+                WHERE institution_id=%(id)s
+                """
+        return connectToMySQL(DATABASE).query_db(query, data)
     
     # ========= Calculate the institution reviews rate ============
     def total_rate(data):

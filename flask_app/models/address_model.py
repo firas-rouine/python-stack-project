@@ -18,7 +18,7 @@ class Address:
         self.created_at = data["created_at"]
         self.updated_at = data["updated_at"]
 
-    # ========== CREATE address ============
+    # ========== CREATE Institution ============
     @classmethod
     def create(cls, data):
         query = """ 
@@ -26,17 +26,31 @@ class Address:
                     VALUES (%(government)s,  %(city)s, %(zipcode)s,%(street)s, %(institution_id)s);
                 """
         return connectToMySQL(DATABASE).query_db(query, data)
-    
-
-    #=================get address by institution id =============
+    #======================= get adresses by id inst=========================
     @classmethod
-    def get_address_by_inst_id(cls,data):
-        query = """ 
-                    SELECT * FROM addresses WHERE institution_id =%(institution_id)s;
-                """
-        results = connectToMySQL(DATABASE).query_db(query,data)
-        return cls(results[0])
+    def get_by_id(cls,id):
+        query="select * from addresses where institution_id=%(id)s"
+        result= connectToMySQL(DATABASE).query_db(query,id)
+        if len(result) <1:
+            return False
+        return (result[0])
 
+    #========================= update addresse institution =======================
+    @classmethod
+    def update(cls,data):
+        query="""UPDATE addresses
+                SET government=%(government)s,city=%(city)s,zipcode=%(zipcode)s,street=%(street)s
+                WHERE institution_id=%(id)s
+                """
+        print('query update adresse 😎😎😎😎😎',query)
+        return connectToMySQL(DATABASE).query_db(query, data)
+    #========================= delete institution =======================
+    @classmethod
+    def delete_adresse(cls,data):
+        query="""DELETE FROM addresses
+                WHERE institution_id=%(id)s
+                """
+        return connectToMySQL(DATABASE).query_db(query, data)
 
     # =============== VALIDATIONS ================
 

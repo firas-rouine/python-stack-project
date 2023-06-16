@@ -10,105 +10,67 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='my_style.css') }}">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Institution</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <style>
-    /* favory */
-    .material-symbols-outlined {
-        color: rgba(0, 0, 0, 0.54);
-        font-variation-settings:
-            'FILL' 1,
-            'wght' 400,
-            'GRAD' 0,
-            'opsz' 48
-    }
-
-    .fa:hover {
-        color: red;
-    }
-
-    .icon-button {
-        border: none;
-        background: none;
-    }
-
-    .fb {
-        color: red;
-    }
-
-    /* reviews */
-    * {
-        margin: 0;
-        padding: 0;
-    }
-
-    .rate {
-        float: left;
-        align-items: start;
-        height: 46px;
-        padding: 0 10px;
-    }
-
-    .rate:not(:checked)>input {
-        position: absolute;
-        top: -9999px;
-    }
-
-    .rate:not(:checked)>label,
-    .ff:not(:checked)>label {
-        float: right;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-
-        font-size: 30px;
-
-    }
-
-    .ra:not(:checked)>label {
-        color: #ccc;
-        cursor: pointer;
-    }
-
-    .ff {
-        color: #ffc700;
-    }
-
-    .rate:not(:checked)>label:before,
-    .ff:not(:checked)>label:before {
-        content: '★ ';
-    }
-
-    s .rate>input:checked~label {
-        color: #ffc700;
-    }
-
-    .rate:not(:checked)>label:hover,
-    .rate:not(:checked)>label:hover~label {
-        color: #deb217;
-    }
-
-    .rate>input:checked+label:hover,
-    .rate>input:checked+label:hover~label,
-    .rate>input:checked~label:hover,
-    .rate>input:checked~label:hover~label,
-    .rate>label:hover~input:checked~label {
-        color: #c59b08;
-    }
-
-    /* comment */
-    .comment {
-        width: 50%;
-    }
+   
 </style>
 
 <body>
-    <div> Navbar
-        <img src="/flask_app/static/uploads/French_test.PNG" style="height: 150px; width: 150px; " alt="institution images">
-        <hr>
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-nav fixed-top" id="mainNav">
+        <a class="navbar-brand p-lg-2" href="#page-top">PathFinder</a>
+
+        <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
+            <form class="form-inline" action="https://www.google.com/search" method="GET" target="_blank">
+                <input class="form-control mr-sm-2 search-input" type="search" name="q" placeholder="Search in Google"
+                    aria-label="Search">
+            </form>
+        </div>
+
+        <ul class="navbar-nav ml-auto">
+            <!-- Navigation links -->
+            <li class="nav-item"></li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#page-top">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#pub-uni">Public Universities</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#pri-uni">Private Universities</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#trai-cent">Training Center</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#contact">Contact</a>
+            </li>
+
+            <!-- Conditional rendering based on user session -->
+            {% if session['user_id']%}
+            <ul class="navbar-nav d-flex flex-row ms-auto me-3">
+                <li class="nav-item me-3 me-lg-0 dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
+                        data-mdb-toggle="dropdown" aria-expanded="false">
+                        <img src="{{image}}" class="rounded-circle" height="24" alt="" loading="lazy" />
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                    </ul>
+                    {% else %}
+               
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Log In</a>
+                </li>
+                {% endif %}
+            </ul>
+    </nav>
+
+    <br><br><br>
     <!-- container -->
     <div class="px-5 py-2 col-10 m-auto">
         <div class="d-flex justify-content-between" style="height: 300px;">
@@ -125,8 +87,9 @@
                     <p>rate: {{global_rate}} ★</p>
                 </div>
             </div>
-
+            
             <div class="d-flex flex-column">
+                {% if session['user_id'] %}
                 <!-- favory -->
                 {% if fav: %}
                 <span class="material-symbols-outlined fb">
@@ -149,6 +112,7 @@
                     <label for="star1" title="text">1</label>
                     {% endfor %}
                 </div>
+            
                 {% else %}
                 <!-- <div class="rate "> -->
                 <h5>Rate this institution:</h5>
@@ -164,35 +128,37 @@
                     <input type="radio" id="star1" name="rate" value="1" onclick="javascript: submit()" />
                     <label for="star1" title="text">1 star</label>
                 </form>
+                {%endif%}
                 <!-- </div> -->
                 {% endif %}
 
             </div>
         </div>
         <!-- main -->
-        <div>
-            <button onclick="show('comments') ,window.location.reload()">Comments</button>
-            <button onclick="show('diplomas')">The diplomas</button>
-            <button onclick="show('pictures')">Pictures</button>
+        <div class="p-5">
+            <button class="buttonnn" onclick="show('comments') ,window.location.reload()">Comments</button>
+            <button class="buttonnn" onclick="show('diplomas')">The diplomas</button>
+            <button class="buttonnn" onclick="show('pictures')">Pictures</button>
         </div>
         <div id="main_place">
             main
         </div>
         <div id="diplomas" style="display:none">
             {% for diploma in diplomas %}
-            <h5>diploma: {{diploma.diploma}}</h5>
-            <p>program title: {{diploma.program_tittle}}</p>
-            <p>description: {{diploma.description}}</p>
+            <p>Diploma: {{diploma.diploma}}</p>
+            <p>Program title: {{diploma.program_tittle}}</p>
+            <p>Description: {{diploma.description}}</p>
             {% endfor %}
         </div>
 
         <div id="pictures" style="display:none">
             {% for image in images %}
-            <img src="{{image.name}}" alt="institution images">
+            <img class="size" src="{{image.name}}" alt="institution images">
             {% endfor %}
         </div>
 
         <div id="comments" style="display:none">
+            <h4>Comments:</h4>
             <!-- Existing comments -->
             <div>
                 {% if comments: %}
@@ -206,12 +172,15 @@
             </div>
             <div id="new_comments">
             </div>
+            {% if session['user_id'] %}
             <label for="comment" class="form-label">Comments:</label>
+            
             <form id="comment-form" action="/add_comment/{{institution.id}}" method="post">
                 <textarea class="form-control w-50" name="comment" cols="60" rows="5"></textarea>
                 <button class="btn btn-primary mt-3">Add comment</button>
 
             </form>
+            {% endif %}
         </div>
 
 
@@ -239,8 +208,6 @@
                             // Handle success response
                             console.log(response);
 
-                            // Call your JavaScript function here
-
 
                             // Append the new comment to the comment section
                             var newComment = $('<div>');
@@ -260,18 +227,11 @@
                     });
                 });
 
-                function testtt() {
-                    console.log('we do it')
-                }
-
-                function show(param_div_id) {
-                    document.getElementById('main_place').innerHTML = document.getElementById(param_div_id).innerHTML;
-                    console.log('############')
-                }
-
             });
         </script>
-
+        <script type="text/javascript"
+        src="https://mdbootstrap.com/api/snippets/static/download/MDB5-Free_6.3.1/js/mdb.min.js"></script>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
     </div>
 </body>
 

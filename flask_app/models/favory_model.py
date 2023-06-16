@@ -19,7 +19,21 @@ class Favory:
                     VALUES (%(user_id)s,  %(institution_id)s);
                 """
         return connectToMySQL(DATABASE).query_db(query, data)
-
+      #========================= delete favory institution =======================
+    @classmethod
+    def delete_favory_inst(cls,data):
+        query="""DELETE FROM favorites
+                WHERE institution_id=%(id)s
+                """
+        return connectToMySQL(DATABASE).query_db(query, data)
+    
+         #========================= delete favory user =======================
+    @classmethod
+    def delete_favory_user(cls,data):
+        query="""DELETE FROM favorites
+                WHERE user_id=%(id)s
+                """
+        return connectToMySQL(DATABASE).query_db(query, data)
     
         # ========= check favory by ID ============
     @classmethod
@@ -30,3 +44,4 @@ class Favory:
         if not results :
             return False
         return cls(results[0])
+    

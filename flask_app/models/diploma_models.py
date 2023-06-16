@@ -21,17 +21,36 @@ class Diploma:
                 """
         return connectToMySQL(DATABASE).query_db(query, data)
     
-    #=========================get all institution diplomas =============
+    #========================get diplomas by id inst================
     @classmethod
-    def get_institution_diplomas(cls,data):
-        query = """ 
-                    SELECT * FROM diplomas WHERE institution_id =%(institution_id)s;
+    def get_by_id(cls,id):
+        query="select * from diplomas where institution_id=%(id)s"
+        result= connectToMySQL(DATABASE).query_db(query,id)
+        if len(result) <1:
+            return False
+        else:
+            list=[]
+            for row in range(0,len(result)):
+                list.append(result[row])
+                
+        return list
+    
+    #========================= update diplomas for institution =======================
+    @classmethod
+    def update(cls,data):
+        query="""UPDATE diplomas
+                SET diploma=%(diploma)s,program_tittle=%(program_tittle)s,description=%(description)s
+                WHERE institution_id=%(id)s
                 """
-        results = connectToMySQL(DATABASE).query_db(query,data)
-        diplomas = []
-        for row in results:
-            diplomas.append(cls(row))
-        return diplomas
+        print('query update diploma 😎😎😎😎😎',query)
+        return connectToMySQL(DATABASE).query_db(query, data)
+    #========================= delete diplomas from institution =======================
+    @classmethod
+    def delete_diploma(cls,data):
+        query="""DELETE FROM diplomas
+                WHERE institution_id=%(id)s
+                """
+        return connectToMySQL(DATABASE).query_db(query, data)
 
 
     # =============== VALIDATIONS ================

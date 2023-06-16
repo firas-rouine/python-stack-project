@@ -64,7 +64,7 @@ class Institution:
             institutions.append(institution)
         return institutions
     
-    #=========================get one creator address=======================
+    #=========================get creator institutions =======================
     @classmethod
     def get_creator_institutions(cls,data):
         query = """
@@ -76,7 +76,7 @@ class Institution:
         for row in results:
             institution=cls(row)
             institution.image = cls.get_image({'institution_id':institution.id})
-            institution.address = address_model.Address.get_address_by_inst_id({'institution_id':institution.id})
+            institution.address = address_model.Address.get_by_id({'id':institution.id})
             institutions.append(institution)
         return institutions 
     
@@ -92,7 +92,76 @@ class Institution:
         return None
     
     
+    #========================= Update institution =======================
+    @classmethod
+    def update(cls,data):
+        query="""UPDATE institutions
+                SET name=%(name)s,select_inst=%(type)s,email=%(email)s,phone=%(phone)s,fax=%(fax)s
+                WHERE id=%(id)s
+                """
+        print('query update institution 😎😎😎😎😎',query)
+        return connectToMySQL(DATABASE).query_db(query, data)
+
+    #========================= delete institution =======================
+    @classmethod
+    def delete_institution(cls,data):
+        query="""DELETE FROM institutions
+                WHERE id=%(id)s
+                """
+        return connectToMySQL(DATABASE).query_db(query, data)
     
+        #========================= delete institution =======================
+    @classmethod
+    def delete_institution_by_user_id(cls,data):
+        query="""DELETE FROM institutions
+                WHERE user_id=%(id)s
+                """
+        return connectToMySQL(DATABASE).query_db(query, data)
+    
+
+    #========================= show favorite in profile user=======================
+    @classmethod
+    def show_favories_institutions(cls, data):
+        query = """
+                    select * from institutions
+                    join favorites on favorites.institution_id = institutions.id
+                    where user_id =%(id)s;
+                """
+        institutions =[]
+        results = connectToMySQL(DATABASE).query_db(query, data)
+        if not results:
+                return 0
+        for result in results:
+            institution=cls(result)
+            institution.image = cls.get_image({'institution_id':institution.id})
+            institution.address = address_model.Address.get_by_id({'id':institution.id})
+            institutions.append(institution)
+        return institutions
+    # ========= GET institution that is awaiting admin approval ============
+    @classmethod
+    def get_awaiting_institutions(cls):
+        institutions =[]
+        query = """SELECT * FROM institutions WHERE is_accept = 0;"""
+        results = connectToMySQL(DATABASE).query_db(query)
+        if not results:
+            return 0
+        for result in results:
+            institution=cls(result)
+            institution.image = cls.get_image({'institution_id':institution.id})
+            institution.address = address_model.Address.get_by_id({'id':institution.id})
+            institutions.append(institution)
+        return institutions
+    
+
+    # ========= accept institution by ID ============
+    @classmethod
+    def accept(cls,data):
+        query="""UPDATE institutions
+        SET is_accept = 1
+        WHERE id = %(id)s;"""
+        return connectToMySQL(DATABASE).query_db(query,data)
+    
+
     # =============== VALIDATIONS ================
 
     @staticmethod

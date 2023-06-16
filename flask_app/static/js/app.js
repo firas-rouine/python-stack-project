@@ -177,6 +177,97 @@ showPage(currentPage);
 
 
 
+// *********************display images from input in page
+function afficherImages(event) {
+  var input = event.target;
+  var imagesDiv = document.getElementById('images');
+
+  imagesDiv.innerHTML = '';
+
+  for (var i = 0; i < input.files.length; i++) {
+      var file = input.files[i];
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+          var img = document.createElement('img');
+          img.classList.add('imageclass')
+          img.src = e.target.result;
+          img.alt = file.name;
+          imagesDiv.appendChild(img);
+          
+      }
+
+      reader.readAsDataURL(file);
+  }
+}
+
+  // **************************add new program
+  var count=1;
+function addNewInputs() {
+  count ++
+  const inputContainer = document.getElementById('inputContainer');
+
+  // add diploma
+  const newInput5Label = document.createElement('label');
+  newInput5Label.textContent = 'Diploma:';
+  newInput5Label.className = "form-label col";
+  const newInput5 = document.createElement('input');
+  newInput5.type = 'text';
+  newInput5.name = 'diploma' + count;
+  newInput5.className = "form-control col";
+
+  const newInput5Div = document.createElement('div');
+  const newInput6Div=document.createElement('div');
+  newInput5Div.appendChild(newInput5Label);
+  newInput5Div.appendChild(newInput6Div);
+  newInput6Div.appendChild(newInput5);
+  newInput5Div.className = "row my-4"
+  newInput6Div.className ="col-9"
+
+  // add program tittle
+  const newInput1Label = document.createElement('label');
+  newInput1Label.textContent = 'Program tittle:';
+  newInput1Label.className = "form-label col";
+  const newInput1 = document.createElement('input');
+  newInput1.type = 'text';
+  newInput1.name = 'program_tittle' + count;
+  newInput1.className = "form-control col";
+
+  const newInput1Div = document.createElement('div');
+  const newInput3Div=document.createElement('div');
+  newInput1Div.appendChild(newInput1Label);
+  newInput1Div.appendChild(newInput3Div);
+  newInput3Div.appendChild(newInput1);
+  newInput1Div.className = "row my-4"
+  newInput3Div.className ="col-9"
+
+  // add description
+  const newInput2Label = document.createElement('label');
+  newInput2Label.textContent = 'Description:';
+  newInput2Label.className = 'form-label col';
+  const newInput2 = document.createElement('textarea');
+  newInput2.type = 'text';
+  newInput2.name = 'description'+count;
+  newInput2.className = 'form-control col';
+
+  const newInput2Div = document.createElement('div');
+  const newInput4Div = document.createElement('div');
+  newInput2Div.appendChild(newInput2Label);
+  newInput2Div.appendChild(newInput4Div);
+  newInput4Div.appendChild(newInput2);
+  newInput2Div.className = "row my-4"
+  newInput4Div.className ="col-9"
+
+  // add new input in countainer
+  inputContainer.appendChild(newInput5Div);
+  inputContainer.appendChild(newInput1Div);
+  inputContainer.appendChild(newInput2Div);
+  
+}
+
+
+
+
 
 
 

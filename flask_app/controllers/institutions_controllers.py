@@ -30,8 +30,9 @@ def allowed_file(filename):
 def show_form():
     user=User.get_by_id({'id':session['user_id']})
     # print('😍😍😍',user.image,'😍😍❤')
+    image=IMAGES_PATH+user.image
     instituion=Institution.get_by_id_creator({'id':session['user_id']})
-    return render_template('institution.html',user=user,institution=instituion)
+    return render_template('institution.html',user=user,institution=instituion,image=image)
 
 #  ========== create institution --- ACTION
 
@@ -41,8 +42,6 @@ def create():
         if not Address.validate(request.form):
             return redirect("/add_institution")
         return redirect("/add_institution")
-    
-    
     data = {
         **request.form,
         "creator_id" : session['user_id']
@@ -50,14 +49,11 @@ def create():
     # Save the institution in DB
     institution_id = Institution.create(data)
     data["institution_id"] = institution_id
+    print(data)
+    # data["institution_id"] = 1
     Address.create(data)
-    
-   
-
-
     # ? *************************save the new diploma program*****************************
     count=1
-    
     data['diploma']=''
     data['program_tittle']=''
     data['description']=''
@@ -80,39 +76,44 @@ def create():
     # ! *************add images**************
     
     files = request.files.getlist('files[]')   
-   
+    # print("-"*20,len(request.files['files[]'].filename),"-"*20)
+    if len(request.files['files[]'].filename)==0:
+        data['name_image']='University-PNG-Clipart.png'
+        Image.create(data)
+        return redirect('/add_institution')
     for file in files:
-        print("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",len(files))
-        if len(files)==1:
-            
-            data['name_image']='user-circle-light.png'
-            
-            Image.create(data)
-        elif file and allowed_file(file.filename):
+        # print("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",len(files),"*"*25)
+            # Image.create(data)
+        if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             data['name_image']=filename
-            session['image']=IMAGES_PATH+filename
-            
+            # session['image']=IMAGES_PATH+filename
             Image.create(data)
-            
     flash('files succesfully uploaded')
     return redirect('/add_institution')
     # ! *************************************
     
 
-# ? ========== Edit Institution =================
+# ? =============================  Edit Institution ==============================
 @app.route('/edit/<int:institution_id>')
 def edit_institution(institution_id):
     if 'user_id' not in session:
-        return redirect('/')
-    institution= Institution.get_by_id_institution({'id': institution_id})
-    images=Image.get_by_id({'id': institution_id})
+        return redirect('/edit/<int:institution_id>')
+    
+    institution= Institution.get_by_id({'id': institution_id})
+    images = Image.get_images_institution({'institution_id': institution_id})
     adresses=Address.get_by_id({'id': institution_id})
     diplomas=Diploma.get_by_id({'id': institution_id})
+    session['diplomas']=diplomas
     user=User.get_by_id({'id':session['user_id']})
-    session['institution_id']= institution
-    return render_template('edit_institution.html',institution=institution,adresses=adresses,diplomas=diplomas,images=images,user=user)
+    image=IMAGES_PATH+user.image
+    session['institution_id']= institution_id
+    counter=len(diplomas)
+    counter-=1
+    
+    
+    return render_template('edit_institution.html',institution=institution,adresses=adresses,diplomas=diplomas,images=images,image=image,user=user,counter=counter)
     
 
 @app.route('/institution/edit', methods=['post'])
@@ -121,16 +122,44 @@ def edit():
         **request.form,
         'id': session['institution_id']
     }
+    
     Institution.update(inst_data)
+    
+    # Image.update(inst_data)
+    Address.update(inst_data)
+    # ? *************************update diploma *****************************
+    print('🤑'*20,len(inst_data))
+    print('🤑'*20,inst_data)
+    
+    if len(inst_data)>13:
+        count=2
+        Diploma.update(inst_data)
+        inst_data['diploma']=''
+        inst_data['program_tittle']=''
+        inst_data['description']=''
+        
+        while ('diploma'+str(count)) in request.form: 
+            inst_data={
+                "id":session['institution_id'],
+                'diploma':request.form['diploma'+str(count)],
+                'program_tittle':request.form['program_tittle'+str(count)],
+                'description':request.form['description'+str(count)]
+            } 
+            print('🤑'*20,inst_data)
+            Diploma.create(inst_data)
+            count+=1
+    else:
+        Diploma.update(inst_data)
+    # ? **************************************************************************************
+    
     if not Institution.validate(request.form):
-        return redirect('/edit/<int:institution_id>_')
+        return redirect('/edit/<int:institution_id>')
     return redirect('/profile')
 
-@app.route('/delete/<int:image_id>')
-def delete_image(image_id):
-    Image.delete_img_inst({'id':image_id})
-    
-
+# @app.route('/delete/<int:image_id>')
+# def delete_image(image_id):
+#     Image.delete_img_inst({'id':image_id})
+#     return redirect
 
 
 
@@ -141,10 +170,31 @@ def delete_image(image_id):
 
 @app.route("/show_institution/<int:id>")
 def show_inst(id):
-    data = {
-        'id' :id,
-        'user_id' :session['user_id'] 
-    }
+    if 'user_id' in session:
+        data = {
+            'id' :id,
+            'user_id' :session['user_id'] 
+        }
+        user = User.get_by_id({'id' :session['user_id']})
+        image=IMAGES_PATH+user.image
+        institution = Institution.get_by_id(data)
+        data['institution_id'] = institution.id
+        session['institution_id']=institution.id
+        fav =  Favory.check_favory(data)
+        user_review = Review.check_review(data)
+        comments = Comment.get_all_comments(data)
+        reviews = Review.get_by_id(data)
+        global_rate = Review.total_rate(reviews)
+        images = Image.get_images_institution(data)
+        diplomas = Diploma.get_by_id(data)
+        address = Address.get_by_id(data)
+        
+        return render_template("show_institution.html",institution=institution, fav=fav,user_review=user_review, comments=comments, global_rate=global_rate,images=images,diplomas=diplomas,address=address,user=user,image=image)
+
+    else :
+        data = {
+            'id' :id
+        }
     institution = Institution.get_by_id(data)
     data['institution_id'] = institution.id
     session['institution_id']=institution.id
@@ -154,9 +204,23 @@ def show_inst(id):
     reviews = Review.get_by_id(data)
     global_rate = Review.total_rate(reviews)
     images = Image.get_images_institution(data)
-    diplomas = Diploma.get_institution_diplomas(data)
-    address = Address.get_address_by_inst_id(data)
+    diplomas = Diploma.get_by_id(data)
+    address = Address.get_by_id(data)
+    
     return render_template("show_institution.html",institution=institution, fav=fav,user_review=user_review, comments=comments, global_rate=global_rate,images=images,diplomas=diplomas,address=address)
+
+# ? ========== delete Institution ==========
+
+@app.route('/institution/delete/<int:id>')
+def delete_institution(id):
+    Review.delete_rate_inst({'id':id})
+    Favory.delete_favory_inst({'id':id})
+    Comment.delete_comment_inst({'id':id})
+    Image.delete_img_inst({'id':id})
+    Diploma.delete_diploma({'id':id})
+    Address.delete_adresse({'id':id})
+    Institution.delete_institution({"id": id})
+    return redirect("/profile")
 
 
 # =================== add new review =====================
@@ -191,7 +255,7 @@ def add_comment(id):
         'id' : session['user_id'],
         'institution_id' : id,
     }
-    print('/////////////////////////////////////////////')
+
     Comment.create(data)
     user=User.get_by_id(data)
     # Create a response dictionary

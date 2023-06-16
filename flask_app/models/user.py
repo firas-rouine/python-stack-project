@@ -46,6 +46,32 @@ class User:
             return []
         return cls(results[0])
     
+    @classmethod
+    def get_all_users(cls):
+        users =[]
+        query = """SELECT * FROM users WHERE is_creator = 0;"""
+        results = connectToMySQL(DATABASE).query_db(query)
+        for result in results:
+            users.append(cls(result))
+        print('*'*30,users)
+        return users
+     # ========= GET all creators ============
+    @classmethod
+    def get_all_creators(cls):
+        users =[]
+        query = """SELECT * FROM users WHERE is_creator = 1;"""
+        results = connectToMySQL(DATABASE).query_db(query)
+        for result in results:
+            users.append(cls(result))
+        print('*'*30,users)
+        return users
+    
+    #================================ delete user ==============
+    @classmethod
+    def delete(cls,data):
+        query="delete from users where id=%(id)s"
+        return connectToMySQL(DATABASE).query_db(query,data)
+    
      #=========================get image user=======================
     @classmethod
     def get_image(cls):
