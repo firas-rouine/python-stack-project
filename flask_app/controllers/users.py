@@ -4,6 +4,7 @@ from flask_app.models.images_model import Image
 from flask_app.models.user import User
 from flask_app.models.address_model import Address
 from flask_app.models.institution_model import Institution
+from flask_app.models import admin_model
 # Set up OpenAI API credentials
 import openai
 
@@ -38,10 +39,11 @@ def index():
 @app.route('/profile')
 def profile():
     institutions=Institution.get_creator_institutions({'id':session['user_id']})
-    # adress=Address.get_address_by_inst_id
+    favory_ins=Institution.show_favories_institutions({'id':session['user_id']})
     user = User.get_by_id({'id':session['user_id']})
     image=IMAGES_PATH+user.image
-    return render_template('user_profile.html',user=user,institutions=institutions,image=image)
+    print(image)
+    return render_template('user_profile.html',user=user,institutions=institutions,image=image,favory_ins=favory_ins)
         
 #========================Root===========================
 @app.route('/register')
@@ -77,6 +79,10 @@ def loginpage():
 
 @app.route('/users/login',methods=['POST'])
 def login():
+    admin = admin_model.Admin.get_by_name({'name': request.form['email']})
+    if admin:
+        if request.form['password'] == admin.password:
+            return redirect('/admin_dashboard')
     user_db = User.get_by_email(request.form)
     if not user_db:
         flash('Invalid email or password',"login")
@@ -92,8 +98,9 @@ def login():
 def edit_profile():
     if 'user_id' not in session:
         return redirect('/') 
-    users = User.get_by_id({'id':session['user_id']})
-    return render_template("edit_profile.html",  user = users)
+    user = User.get_by_id({'id':session['user_id']})
+    image=IMAGES_PATH+user.image
+    return render_template("edit_profile.html",  user = user,image=image)
 
 
 @app.route('/profile/update',methods=['post'])
